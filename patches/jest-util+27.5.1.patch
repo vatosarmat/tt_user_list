@@ -1,0 +1,12 @@
+diff --git a/node_modules/jest-util/build/specialChars.js b/node_modules/jest-util/build/specialChars.js
+index b859ebd..f45c04b 100644
+--- a/node_modules/jest-util/build/specialChars.js
++++ b/node_modules/jest-util/build/specialChars.js
+@@ -21,5 +21,6 @@ const ICONS = {
+   todo: '\u270E'
+ };
+ exports.ICONS = ICONS;
+-const CLEAR = isWindows ? '\x1B[2J\x1B[0f' : '\x1B[2J\x1B[3J\x1B[H';
++// const CLEAR = isWindows ? '\x1B[2J\x1B[0f' : '\x1B[2J\x1B[3J\x1B[H';
++const CLEAR = ''
+ exports.CLEAR = CLEAR;
