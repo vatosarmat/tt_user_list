@@ -1,0 +1,45 @@
+.link-button {
+  text-decoration: none;
+  color: #292ecc;
+}
+
+.link-button:hover {
+  cursor: pointer;
+  background-color: #e5e6ff;
+}
+
+.list__title {
+  text-align: center;
+}
+
+.list__items > *:not(:last-child) {
+  margin-bottom: 24px;
+}
+
+.list-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: repeat(3, auto);
+  column-gap: 8px;
+  row-gap: 4px;
+
+  list-style-type: none;
+
+  background: #ebebeb;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+.list-item__value-fullname {
+  grid-column: 2 / span 2;
+  grid-row: 1;
+}
+
+.list-item__value-city {
+  grid-column: 2 / span 2;
+  grid-row: 2;
+}
+
+.list-item__label {
+  text-align: right;
+}

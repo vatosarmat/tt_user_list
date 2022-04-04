@@ -1,0 +1,17 @@
+.radio {
+  /* display: block; */
+  display: flex;
+  align-items: end;
+}
+
+.radio:hover {
+  cursor: pointer;
+}
+
+.radio__input {
+  margin-right: 4px;
+}
+
+.radio__label-text {
+  /* vertical-align: middle; */
+}

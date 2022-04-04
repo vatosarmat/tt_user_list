@@ -1,0 +1,41 @@
+.user-form {
+}
+
+.user-form__title {
+  text-align: center;
+}
+
+.user-form__form {
+  border: 1px solid #cdcdcd;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.user-form__form > *:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.user-form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-form-field > span {
+  margin-bottom: 2px;
+}
+
+.user-form-field > input,
+.user-form-field > textarea {
+  border: 1px solid #808080;
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+
+.user-form-field > input {
+  width: 220px;
+}
+
+.user-form-field > textarea {
+  resize: none;
+  height: 72px;
+}

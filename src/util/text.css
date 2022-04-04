@@ -1,0 +1,36 @@
+.text-title {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  font: normal 600 18px 'Roboto';
+
+  color: #000000;
+}
+
+.text-light {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 12px;
+
+  color: #808080;
+}
+
+.text-normal {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+
+  color: #19191a;
+}
+
+.text-label {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 8px;
+
+  color: #19191a;
+}

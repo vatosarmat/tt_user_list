@@ -1,0 +1,28 @@
+.app {
+  display: flex;
+  flex-direction: row;
+  width: 680px;
+  /* width: 128px; */
+  /* padding: 16px; */
+  /* background-color: #ccccff; */
+}
+
+.app__side,
+.app__content {
+  padding: 32px;
+}
+
+.app__side {
+  background: #cdcdcd;
+  box-sizing: border-box;
+  width: 180px;
+}
+
+.app__content {
+  background: #ffffff;
+  flex-grow: 1;
+}
+
+.app__content > *:not(:last-child) {
+  margin-bottom: 32px;
+}
