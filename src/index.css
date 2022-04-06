@@ -15,6 +15,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+#root {
+}
+
 #root > .app {
   margin: 40px auto;
 }

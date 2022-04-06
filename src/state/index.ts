@@ -25,7 +25,7 @@ export type State = {
 }
 
 export const initialState: State = {
-  nextUserInfoId: 0,
+  nextUserInfoId: 1,
   userInfoTable: {},
   userInfoSortKey: 'fullName'
 }

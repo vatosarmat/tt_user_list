@@ -1,14 +1,30 @@
 import { useReducer, useEffect } from 'react'
-import { useParams, BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useParams, useNavigate, BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import { reducer, initialState, StateContext, DispatchContext, UserInfo } from 'state'
 import Sort from 'components/Sort'
 import List from 'components/List'
 import UserForm from 'components/UserForm'
-import BackButton from 'components/BackButton'
+import IconButton from 'components/IconButton'
 import './App.css'
 
-const UserFormRoute: React.FC = () => {
+const ListSideRoute: React.FC = () => {
+  const navigate = useNavigate()
+
+  return (
+    <>
+      <Sort />
+      <IconButton icon={'+'} label={'Add new'} onClick={() => navigate('/add')} />
+    </>
+  )
+}
+
+const BackButton: React.FC = () => {
+  const navigate = useNavigate()
+  return <IconButton icon={'<='} label={'Back'} onClick={() => navigate(-1)} />
+}
+
+const UserFormWithId: React.FC = () => {
   const params = useParams()
   const id = params['id']
 
@@ -40,14 +56,18 @@ const App: React.FC = () => {
         <DispatchContext.Provider value={dispatch}>
           <BrowserRouter>
             <div className="app__side">
-              <Routes>
-                <Route path="/:id" element={<BackButton />} />
-                <Route path="*" element={<Sort />} />
-              </Routes>
+              <div className="app__side-content">
+                <Routes>
+                  <Route path="/:id" element={<BackButton />} />
+                  <Route path="/add" element={<BackButton />} />
+                  <Route path="*" element={<ListSideRoute />} />
+                </Routes>
+              </div>
             </div>
             <div className="app__content">
               <Routes>
-                <Route path="/:id" element={<UserFormRoute />} />
+                <Route path="/:id" element={<UserFormWithId />} />
+                <Route path="/add" element={<UserForm />} />
                 <Route path="*" element={<List />} />
               </Routes>
             </div>

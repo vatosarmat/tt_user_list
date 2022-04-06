@@ -2,9 +2,6 @@
   display: flex;
   flex-direction: row;
   width: 680px;
-  /* width: 128px; */
-  /* padding: 16px; */
-  /* background-color: #ccccff; */
 }
 
 .app__side,
@@ -16,6 +13,11 @@
   background: #cdcdcd;
   box-sizing: border-box;
   width: 180px;
+}
+
+.app__side-content {
+  position: sticky;
+  top: 0;
 }
 
 .app__content {
