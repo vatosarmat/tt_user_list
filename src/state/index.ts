@@ -1,4 +1,4 @@
-import type { Reducer } from 'react'
+import type { Reducer, Dispatch } from 'react'
 import { createContext } from 'react'
 
 export type UserInfo = {
@@ -93,4 +93,4 @@ export const reducer: Reducer<State, Action> = (state, { type, payload }) => {
 }
 
 export const StateContext = createContext(initialState)
-export const DispatchContext = createContext((a: Action) => {})
+export const DispatchContext = createContext<Dispatch<Action>>(a => {})

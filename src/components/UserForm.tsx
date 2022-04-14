@@ -1,4 +1,5 @@
-import { useCallback, useState, useContext, useRef, createContext } from 'react'
+import { useState, useContext, useRef, createContext } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
 
 import { StateContext, DispatchContext, State, UserInfo } from 'state'
@@ -22,14 +23,11 @@ type FormFieldProps = {
 
 const FormField: React.FC<FormFieldProps> = ({ name, multiline = false, label, defaultValue }) => {
   const { register, disabled, defaultRecord } = useContext(FormContext)
-  const registerInput = useCallback(
-    (input: null | HTMLInputElement | HTMLTextAreaElement) => {
-      if (input) {
-        register(name, input)
-      }
-    },
-    [name, register]
-  )
+  const registerInput = (input: null | HTMLInputElement | HTMLTextAreaElement) => {
+    if (input) {
+      register(name, input)
+    }
+  }
 
   if (!label) {
     let nameAr = name.match(/[A-Z][a-z]+|[a-z]+/g)
@@ -57,9 +55,9 @@ const FormField: React.FC<FormFieldProps> = ({ name, multiline = false, label, d
 
 const useFormFields = () => {
   const fieldsRef = useRef<Record<string, HTMLInputElement | HTMLTextAreaElement>>({})
-  const register = useCallback((name: string, inputEl: HTMLInputElement | HTMLTextAreaElement) => {
+  const register = (name: string, inputEl: HTMLInputElement | HTMLTextAreaElement) => {
     fieldsRef.current[name] = inputEl
-  }, [])
+  }
 
   return [fieldsRef, register] as const
 }
@@ -94,14 +92,21 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
   const userInfo = useContext(StateContext).userInfoTable[id]
   const dispatch = useContext(DispatchContext)
   const [fieldsRef, register] = useFormFields()
+  const navigate = useNavigate()
 
-  const onApplyEdit: React.MouseEventHandler<HTMLButtonElement> = useCallback(() => {
+  const onApplyEdit: React.MouseEventHandler<HTMLButtonElement> = () => {
     const newUserInfo: Record<string, string> = {}
     for (const [name, inputEl] of Object.entries(fieldsRef.current)) {
       newUserInfo[name] = inputEl.value
     }
     dispatch({ type: 'UserInfo/edit', payload: { userInfoId: id, userInfoChange: newUserInfo } })
-  }, [id, dispatch, fieldsRef])
+    setReadOnly(true)
+  }
+
+  const onRemove: React.MouseEventHandler<HTMLButtonElement> = () => {
+    navigate('/')
+    dispatch({ type: 'UserInfo/remove', payload: { userInfoId: id } })
+  }
 
   const formContext: FormContextValue = { register, disabled: readOnly, defaultRecord: userInfo }
 
@@ -122,6 +127,9 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
             <button className="user-form__apply" onClick={onApplyEdit}>
               Apply
             </button>
+            <button className="user-form__remove" onClick={onRemove}>
+              Remove
+            </button>
             <button
               className="user-form__cancel"
               onClick={() => {
@@ -140,20 +148,24 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
 type UserFormAddProps = BlockProps & {}
 
 const UserFormAdd: React.FC<UserFormAddProps> = props => {
+  const addedId = useContext(StateContext).nextUserInfoId.toString()
   const dispatch = useContext(DispatchContext)
+  const [didAdded, setDidAdded] = useState<string | undefined>(undefined)
   const [fieldsRef, register] = useFormFields()
 
-  const onSubmit: React.MouseEventHandler<HTMLButtonElement> = useCallback(
-    evt => {
-      const userInfo: Record<string, string> = {}
-      for (const [name, inputEl] of Object.entries(fieldsRef.current)) {
-        userInfo[name] = inputEl.value
-      }
+  const onSubmit: React.MouseEventHandler<HTMLButtonElement> = evt => {
+    const userInfo: Record<string, string> = {}
+    for (const [name, inputEl] of Object.entries(fieldsRef.current)) {
+      userInfo[name] = inputEl.value
+    }
 
-      dispatch({ type: 'UserInfo/add', payload: { userInfoData: userInfo as Omit<UserInfo, 'id'> } })
-    },
-    [dispatch, fieldsRef]
-  )
+    dispatch({ type: 'UserInfo/add', payload: { userInfoData: userInfo as Omit<UserInfo, 'id'> } })
+    setDidAdded(addedId)
+  }
+
+  if (didAdded) {
+    return <Navigate to={'/' + didAdded} />
+  }
 
   return (
     <FormContext.Provider value={{ register }}>

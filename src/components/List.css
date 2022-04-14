@@ -1,3 +1,4 @@
+/* link-button */
 .link-button {
   text-decoration: none;
   color: #292ecc;
@@ -8,6 +9,7 @@
   background-color: #e5e6ff;
 }
 
+/* list */
 .list__title {
   text-align: center;
 }
@@ -16,6 +18,7 @@
   margin-bottom: 24px;
 }
 
+/* list-item */
 .list-item {
   display: grid;
   grid-template-columns: auto 1fr auto;
