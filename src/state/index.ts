@@ -4,16 +4,10 @@ import { createContext } from 'react'
 export type UserInfo = {
   id: string
   fullName: string
-  userName: string
   email: string
-  phone: string
 
   city: string
-  street: string
-  zipCode: string
-
   company: string
-  website: string
 
   comment?: string
 }

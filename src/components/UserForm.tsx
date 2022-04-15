@@ -14,14 +14,29 @@ type FormContextValue = {
 
 const FormContext = createContext<FormContextValue>({ register: () => {}, disabled: false, defaultRecord: {} })
 
+type ValidPattern = {
+  pattern: string
+  description: string
+}
+
 type FormFieldProps = {
   name: string
+  required?: boolean
+  validPattern?: ValidPattern
+  title?: string
   multiline?: boolean
   label?: string
   defaultValue?: string
 }
 
-const FormField: React.FC<FormFieldProps> = ({ name, multiline = false, label, defaultValue }) => {
+const FormField: React.FC<FormFieldProps> = ({
+  name,
+  required = false,
+  multiline = false,
+  validPattern,
+  label,
+  defaultValue
+}) => {
   const { register, disabled, defaultRecord } = useContext(FormContext)
   const registerInput = (input: null | HTMLInputElement | HTMLTextAreaElement) => {
     if (input) {
@@ -43,12 +58,19 @@ const FormField: React.FC<FormFieldProps> = ({ name, multiline = false, label, d
     defaultValue = defaultRecord ? defaultRecord[name as keyof State] : undefined
   }
 
-  const props = { name, ref: registerInput, defaultValue, disabled }
+  const props = {
+    name,
+    required,
+    ref: registerInput,
+    defaultValue,
+    disabled,
+    ...(validPattern ? { title: validPattern.description, pattern: validPattern.pattern } : {})
+  }
 
   return (
     <label className="user-form-field">
       <span className="text-label">{label}</span>
-      {multiline ? <textarea {...props} /> : <input type="text" {...props} />}
+      {multiline ? <textarea {...props} /> : <input type={name === 'email' ? 'email' : 'text'} {...props} />}
     </label>
   )
 }
@@ -62,25 +84,30 @@ const useFormFields = () => {
   return [fieldsRef, register] as const
 }
 
-type UserFormPropsCommon = BlockProps & { disabled?: boolean; defaultRecord?: Record<string, string> }
+type UserFormPropsCommon = BlockProps & {
+  onSubmit: React.FormEventHandler<HTMLFormElement>
+}
 
-const UserFormCommon: React.FC<UserFormPropsCommon> = ({ classes, children }) => {
+const UserFormCommon: React.FC<UserFormPropsCommon> = ({ onSubmit, classes, children: buttons }) => {
+  const namePattern = {
+    pattern: /\p{L}[\p{L}.' -]+[\p{L}.]/.source,
+    description: `Unicode letters, <'>, <->, <.> and < > allowed`
+  }
+  const companyPattern = {
+    pattern: /\S.*/.source,
+    description: `Must not be whitespace`
+  }
   return (
     <div className={clsx('user-form', classes)}>
       <h2 className="text-title user-form__title">User list</h2>
-      <form className="user-form__form">
-        <FormField name="fullName" />
-        <FormField name="userName" />
-        <FormField name="email" />
-        <FormField name="phone" />
-        <FormField name="city" />
-        <FormField name="street" />
-        <FormField name="zipCode" />
-        <FormField name="company" />
-        <FormField name="website" />
+      <form className="user-form__form" onSubmit={onSubmit}>
+        <FormField name="fullName" required validPattern={namePattern} />
+        <FormField name="email" required />
+        <FormField name="city" required validPattern={namePattern} />
+        <FormField name="company" required validPattern={companyPattern} />
         <FormField name="comment" multiline />
+        {buttons}
       </form>
-      {children}
     </div>
   )
 }
@@ -94,10 +121,10 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
   const [fieldsRef, register] = useFormFields()
   const navigate = useNavigate()
 
-  const onApplyEdit: React.MouseEventHandler<HTMLButtonElement> = () => {
+  const onApplyEdit: UserFormPropsCommon['onSubmit'] = () => {
     const newUserInfo: Record<string, string> = {}
     for (const [name, inputEl] of Object.entries(fieldsRef.current)) {
-      newUserInfo[name] = inputEl.value
+      newUserInfo[name] = inputEl.value.trim()
     }
     dispatch({ type: 'UserInfo/edit', payload: { userInfoId: id, userInfoChange: newUserInfo } })
     setReadOnly(true)
@@ -112,7 +139,7 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
 
   return (
     <FormContext.Provider value={formContext}>
-      <UserFormCommon {...props}>
+      <UserFormCommon onSubmit={onApplyEdit} {...props}>
         {readOnly ? (
           <button
             className="user-form__edit"
@@ -124,7 +151,7 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
           </button>
         ) : (
           <div>
-            <button className="user-form__apply" onClick={onApplyEdit}>
+            <button type="submit" className="user-form__apply">
               Apply
             </button>
             <button className="user-form__remove" onClick={onRemove}>
@@ -153,7 +180,7 @@ const UserFormAdd: React.FC<UserFormAddProps> = props => {
   const [didAdded, setDidAdded] = useState<string | undefined>(undefined)
   const [fieldsRef, register] = useFormFields()
 
-  const onSubmit: React.MouseEventHandler<HTMLButtonElement> = evt => {
+  const onSubmit: UserFormPropsCommon['onSubmit'] = evt => {
     const userInfo: Record<string, string> = {}
     for (const [name, inputEl] of Object.entries(fieldsRef.current)) {
       userInfo[name] = inputEl.value
@@ -169,8 +196,8 @@ const UserFormAdd: React.FC<UserFormAddProps> = props => {
 
   return (
     <FormContext.Provider value={{ register }}>
-      <UserFormCommon {...props}>
-        <button className="user-form__submit" onClick={onSubmit}>
+      <UserFormCommon onSubmit={onSubmit} {...props}>
+        <button type="submit" className="user-form__submit">
           Submit
         </button>
       </UserFormCommon>

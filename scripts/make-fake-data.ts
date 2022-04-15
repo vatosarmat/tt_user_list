@@ -6,17 +6,17 @@ const makePerson = () => {
   const company = faker.unique(faker.company.companyName)
   return {
     fullName,
-    userName: faker.internet.userName(...fullNameAr),
+    // userName: faker.internet.userName(...fullNameAr),
     email: faker.internet.email(...fullNameAr),
 
-    phone: faker.unique(faker.phone.phoneNumber, ['+###########']),
+    // phone: faker.unique(faker.phone.phoneNumber, ['+###########']),
 
     city: faker.address.cityName(),
-    street: faker.unique(faker.address.streetName),
-    zipCode: faker.unique(faker.address.zipCode),
+    // street: faker.unique(faker.address.streetName),
+    // zipCode: faker.unique(faker.address.zipCode),
 
     company,
-    website: `www.${company.split(/[^A-Za-z]/)[0].toLowerCase()}.${faker.internet.domainSuffix()}`,
+    // website: `www.${company.split(/[^A-Za-z]/)[0].toLowerCase()}.${faker.internet.domainSuffix()}`,
 
     comment: faker.datatype.boolean() ? faker.lorem.paragraph(3) : undefined
   }
