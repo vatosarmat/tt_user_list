@@ -5,6 +5,9 @@ import clsx from 'clsx'
 import { StateContext, DispatchContext, State, UserInfo } from 'state'
 import type { BlockProps } from 'util/common'
 import './UserForm.css'
+import { ReactComponent as Check } from 'icons/check.svg'
+import { ReactComponent as Pencil } from 'icons/pencil.svg'
+import { ReactComponent as Trash } from 'icons/trash.svg'
 
 type FormContextValue = {
   register: (name: string, input: HTMLInputElement | HTMLTextAreaElement) => void
@@ -98,17 +101,17 @@ const UserFormCommon: React.FC<UserFormPropsCommon> = ({ onSubmit, classes, chil
     description: `Must not be whitespace`
   }
   return (
-    <div className={clsx('user-form', classes)}>
+    <form className={clsx('user-form', classes)} onSubmit={onSubmit}>
       <h2 className="text-title user-form__title">User list</h2>
-      <form className="user-form__form" onSubmit={onSubmit}>
+      <div className="user-form__fields">
         <FormField name="fullName" required validPattern={namePattern} />
         <FormField name="email" required />
         <FormField name="city" required validPattern={namePattern} />
         <FormField name="company" required validPattern={companyPattern} />
         <FormField name="comment" multiline />
-        {buttons}
-      </form>
-    </div>
+      </div>
+      {buttons}
+    </form>
   )
 }
 
@@ -121,18 +124,20 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
   const [fieldsRef, register] = useFormFields()
   const navigate = useNavigate()
 
-  const onApplyEdit: UserFormPropsCommon['onSubmit'] = () => {
+  const onApplyEdit: UserFormPropsCommon['onSubmit'] = evt => {
     const newUserInfo: Record<string, string> = {}
     for (const [name, inputEl] of Object.entries(fieldsRef.current)) {
       newUserInfo[name] = inputEl.value.trim()
     }
     dispatch({ type: 'UserInfo/edit', payload: { userInfoId: id, userInfoChange: newUserInfo } })
     setReadOnly(true)
+    evt.preventDefault()
   }
 
-  const onRemove: React.MouseEventHandler<HTMLButtonElement> = () => {
+  const onRemove: React.MouseEventHandler<HTMLButtonElement> = evt => {
     navigate('/')
     dispatch({ type: 'UserInfo/remove', payload: { userInfoId: id } })
+    evt.preventDefault()
   }
 
   const formContext: FormContextValue = { register, disabled: readOnly, defaultRecord: userInfo }
@@ -141,26 +146,35 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
     <FormContext.Provider value={formContext}>
       <UserFormCommon onSubmit={onApplyEdit} {...props}>
         {readOnly ? (
-          <button
-            className="user-form__edit"
-            onClick={() => {
-              setReadOnly(false)
-            }}
-          >
-            Edit
-          </button>
+          <div className="user-form__buttons">
+            <button
+              type="button"
+              className="text-large user-form__edit"
+              onClick={evt => {
+                setReadOnly(false)
+                evt.preventDefault()
+              }}
+            >
+              <Pencil width="1em" height="1em" />
+              Edit
+            </button>
+          </div>
         ) : (
-          <div>
-            <button type="submit" className="user-form__apply">
+          <div className="user-form__buttons">
+            <button type="submit" className="text-large user-form__apply">
+              <Check width="1em" height="1em" />
               Apply
             </button>
-            <button className="user-form__remove" onClick={onRemove}>
+            <button type="button" className="text-large user-form__remove" onClick={onRemove}>
+              <Trash width="1em" height="1em" />
               Remove
             </button>
             <button
-              className="user-form__cancel"
-              onClick={() => {
+              type="button"
+              className="text-large user-form__cancel"
+              onClick={evt => {
                 setReadOnly(true)
+                evt.preventDefault()
               }}
             >
               Cancel

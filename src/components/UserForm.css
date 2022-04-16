@@ -1,19 +1,80 @@
 /* user-form */
-.user-form {
+.user-form > *:not(:last-child) {
+  margin-bottom: 16px;
 }
 
 .user-form__title {
   text-align: center;
 }
 
-.user-form__form {
+.user-form__fields {
   border: 1px solid #cdcdcd;
   border-radius: 8px;
   padding: 12px;
 }
 
-.user-form__form > *:not(:last-child) {
+.user-form__fields > *:not(:last-child) {
   margin-bottom: 8px;
+}
+
+.user-form__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.user-form__buttons > button {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  line-height: 1;
+  width: 100px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: transparent;
+  color: #111111;
+  border: 1px solid #111111;
+}
+
+.user-form__buttons > button:hover {
+  cursor: pointer;
+  background-color: #cdcdcd;
+}
+
+.user-form__buttons > button:active {
+  cursor: pointer;
+  background-color: #cdcdcd;
+  border-color: #000000;
+  color: #000000;
+}
+
+.user-form__buttons > button.user-form__apply {
+  color: #292ecc;
+  border-color: #292ecc;
+}
+
+.user-form__buttons > button.user-form__apply:hover {
+  background-color: #e5e6ff;
+}
+.user-form__buttons > button.user-form__apply:active {
+  background-color: #e5e6ff;
+  border-color: #000366;
+  color: #000366;
+}
+
+.user-form__buttons > button.user-form__remove {
+  color: #cc2929;
+  border-color: #cc2929;
+}
+
+.user-form__buttons > button.user-form__remove:hover {
+  background-color: #ffcccc;
+}
+
+.user-form__buttons > button.user-form__remove:active {
+  background-color: #ffcccc;
+  color: #660000;
+  border-color: #660000;
 }
 
 /* user-form-field */
