@@ -56,6 +56,7 @@
 .user-form__buttons > button.user-form__apply:hover {
   background-color: #e5e6ff;
 }
+
 .user-form__buttons > button.user-form__apply:active {
   background-color: #e5e6ff;
   border-color: #000366;

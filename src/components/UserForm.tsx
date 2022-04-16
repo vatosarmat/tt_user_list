@@ -4,10 +4,11 @@ import clsx from 'clsx'
 
 import { StateContext, DispatchContext, State, UserInfo } from 'state'
 import type { BlockProps } from 'util/common'
-import './UserForm.css'
 import { ReactComponent as Check } from 'icons/check.svg'
 import { ReactComponent as Pencil } from 'icons/pencil.svg'
 import { ReactComponent as Trash } from 'icons/trash.svg'
+import { ReactComponent as Cross } from 'icons/x.svg'
+import './UserForm.css'
 
 type FormContextValue = {
   register: (name: string, input: HTMLInputElement | HTMLTextAreaElement) => void
@@ -102,7 +103,7 @@ const UserFormCommon: React.FC<UserFormPropsCommon> = ({ onSubmit, classes, chil
   }
   return (
     <form className={clsx('user-form', classes)} onSubmit={onSubmit}>
-      <h2 className="text-title user-form__title">User list</h2>
+      <h2 className="text-title user-form__title">User profile</h2>
       <div className="user-form__fields">
         <FormField name="fullName" required validPattern={namePattern} />
         <FormField name="email" required />
@@ -177,6 +178,7 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
                 evt.preventDefault()
               }}
             >
+              <Cross width="1em" height="1em" />
               Cancel
             </button>
           </div>

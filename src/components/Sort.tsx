@@ -20,7 +20,7 @@ const Sort: React.FC<SortProps> = ({ classes }) => {
 
   return (
     <div className={clsx('sort', classes)}>
-      <h2 className="text-title sort__title">Sort by</h2>
+      <h2 className="text-sub-title sort__title">Sort by</h2>
       <RadioGroup variants={variants} name="user" value={sortKey} onChange={setSortKey} />
     </div>
   )

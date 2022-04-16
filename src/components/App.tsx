@@ -4,6 +4,8 @@ import Sort from 'components/Sort'
 import List from 'components/List'
 import UserForm from 'components/UserForm'
 import IconButton from 'components/IconButton'
+import { ReactComponent as ArrowCircleLeft } from 'icons/arrow-circle-left.svg'
+import { ReactComponent as PlusCircle } from 'icons/plus-circle.svg'
 import './App.css'
 
 const ListSideRoute: React.FC = () => {
@@ -12,14 +14,14 @@ const ListSideRoute: React.FC = () => {
   return (
     <>
       <Sort />
-      <IconButton icon={'+'} label={'Add new'} onClick={() => navigate('/add')} />
+      <IconButton Icon={PlusCircle} label="Add new" onClick={() => navigate('/add')} />
     </>
   )
 }
 
 const BackButton: React.FC = () => {
   const navigate = useNavigate()
-  return <IconButton icon={'<='} label={'Back'} onClick={() => navigate('/')} />
+  return <IconButton Icon={ArrowCircleLeft} label="Back" onClick={() => navigate('/')} />
 }
 
 const UserFormWithId: React.FC = () => {

@@ -6,9 +6,17 @@
   color: #000000;
 }
 
-.text-large {
+.text-sub-title {
   font-family: 'Roboto';
   font-weight: 500;
+  font-size: 16px;
+
+  color: #000000;
+}
+
+.text-large {
+  font-family: 'Roboto';
+  font-weight: 400;
   font-size: 14px;
 
   color: #000000;
