@@ -3,11 +3,12 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
 
 import { StateContext, DispatchContext, State, UserInfo } from 'state'
-import type { BlockProps } from 'util/common'
+import type { BlockProps } from 'utils/common'
 import { ReactComponent as Check } from 'icons/check.svg'
 import { ReactComponent as Pencil } from 'icons/pencil.svg'
 import { ReactComponent as Trash } from 'icons/trash.svg'
 import { ReactComponent as Cross } from 'icons/x.svg'
+import { ReactComponent as Plus } from 'icons/plus.svg'
 import './UserForm.css'
 
 type FormContextValue = {
@@ -103,7 +104,6 @@ const UserFormCommon: React.FC<UserFormPropsCommon> = ({ onSubmit, classes, chil
   }
   return (
     <form className={clsx('user-form', classes)} onSubmit={onSubmit}>
-      <h2 className="text-title user-form__title">User profile</h2>
       <div className="user-form__fields">
         <FormField name="fullName" required validPattern={namePattern} />
         <FormField name="email" required />
@@ -150,7 +150,7 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
           <div className="user-form__buttons">
             <button
               type="button"
-              className="text-large user-form__edit"
+              className="text-normal user-form__edit"
               onClick={evt => {
                 setReadOnly(false)
                 evt.preventDefault()
@@ -162,17 +162,17 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
           </div>
         ) : (
           <div className="user-form__buttons">
-            <button type="submit" className="text-large user-form__apply">
+            <button type="submit" className="text-normal user-form__apply">
               <Check width="1em" height="1em" />
               Apply
             </button>
-            <button type="button" className="text-large user-form__remove" onClick={onRemove}>
+            <button type="button" className="text-normal user-form__remove" onClick={onRemove}>
               <Trash width="1em" height="1em" />
               Remove
             </button>
             <button
               type="button"
-              className="text-large user-form__cancel"
+              className="text-normal user-form__cancel"
               onClick={evt => {
                 setReadOnly(true)
                 evt.preventDefault()
@@ -213,9 +213,12 @@ const UserFormAdd: React.FC<UserFormAddProps> = props => {
   return (
     <FormContext.Provider value={{ register }}>
       <UserFormCommon onSubmit={onSubmit} {...props}>
-        <button type="submit" className="user-form__submit">
-          Submit
-        </button>
+        <div className="user-form__buttons">
+          <button type="submit" className="text-normal user-form__apply">
+            <Plus width="1em" height="1em" />
+            Submit
+          </button>
+        </div>
       </UserFormCommon>
     </FormContext.Provider>
   )

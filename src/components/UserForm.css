@@ -3,12 +3,8 @@
   margin-bottom: 16px;
 }
 
-.user-form__title {
-  text-align: center;
-}
-
 .user-form__fields {
-  border: 1px solid #cdcdcd;
+  border: 1px solid var(--theme-neutral-light2);
   border-radius: 8px;
   padding: 12px;
 }
@@ -32,50 +28,50 @@
   padding: 8px;
   border-radius: 4px;
   background-color: transparent;
-  color: #111111;
-  border: 1px solid #111111;
+  color: var(--theme-neutral-normal);
+  border: 1px solid currentColor;
 }
 
 .user-form__buttons > button:hover {
   cursor: pointer;
-  background-color: #cdcdcd;
+  background-color: var(--theme-neutral-light2);
 }
 
 .user-form__buttons > button:active {
   cursor: pointer;
-  background-color: #cdcdcd;
-  border-color: #000000;
-  color: #000000;
+  background-color: var(--theme-neutral-light2);
+  color: var(--theme-neutral-dark);
+  border-color: currentColor;
 }
 
 .user-form__buttons > button.user-form__apply {
-  color: #292ecc;
-  border-color: #292ecc;
+  color: var(--theme-primary-normal);
+  border-color: currentColor;
 }
 
 .user-form__buttons > button.user-form__apply:hover {
-  background-color: #e5e6ff;
+  background-color: var(--theme-primary-light);
 }
 
 .user-form__buttons > button.user-form__apply:active {
-  background-color: #e5e6ff;
-  border-color: #000366;
-  color: #000366;
+  background-color: var(--theme-primary-light);
+  color: var(--theme-primary-dark);
+  border-color: currentColor;
 }
 
 .user-form__buttons > button.user-form__remove {
-  color: #cc2929;
-  border-color: #cc2929;
+  color: var(--theme-danger-normal);
+  border-color: currentColor;
 }
 
 .user-form__buttons > button.user-form__remove:hover {
-  background-color: #ffcccc;
+  background-color: var(--theme-danger-light);
 }
 
 .user-form__buttons > button.user-form__remove:active {
-  background-color: #ffcccc;
-  color: #660000;
-  border-color: #660000;
+  background-color: var(--theme-danger-light);
+  color: var(--theme-danger-dark);
+  border-color: currentColor;
 }
 
 /* user-form-field */
@@ -90,7 +86,7 @@
 
 .user-form-field > input,
 .user-form-field > textarea {
-  border: 1px solid #808080;
+  border: 1px solid var(--theme-neutral-light);
   border-radius: 4px;
   padding: 6px 8px;
 }

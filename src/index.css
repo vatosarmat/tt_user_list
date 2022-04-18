@@ -15,6 +15,32 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+:root {
+  --layout-side-width: 180px;
+  --layout-total-width: 680px;
+  --layout-spacing-large: 24px;
+  --layout-spacing-medium: 20px;
+  --layout-spacing-small: 12px;
+  --layout-spacing-xsmall: 8px;
+
+  --theme-neutral-dark: #000000;
+  --theme-neutral-normal: #19191a;
+  --theme-neutral-light: #808080; /*light text on lite items, form fields border*/
+  --theme-neutral-light2: #cdcdcd; /*sidebar, form border*/
+  --theme-neutral-light3: #eaeaea; /*hover, list item*/
+  --theme-neutral-light10: #ffffff;
+
+  --theme-primary-dark: #000366;
+  --theme-primary-normal: #292ecc;
+  --theme-primary-saturated: #0000ff;
+  --theme-primary-light: #e5e6ff;
+
+  --theme-danger-dark: #660000;
+  --theme-danger-normal: #cc2929;
+  --theme-danger-light: #ffcccc;
+}
+
 #root > * {
   margin: 40px auto;
+  color: var(--theme-neutral-normal);
 }

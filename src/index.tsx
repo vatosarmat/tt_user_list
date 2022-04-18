@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import 'util/text.css'
+import 'utils/text.css'
 import 'index.css'
 import Root from 'components/Root'
 

@@ -9,18 +9,19 @@
   border-radius: 8px;
   background-color: transparent;
   padding: 4px 8px;
-  color: #292ecc;
+  color: var(--theme-primary-normal);
 }
 
 .icon-button__label {
-  color: #000000;
+  color: var(--theme-neutral-dark);
 }
 
 .icon-button:hover {
   cursor: pointer;
-  background-color: #e5e6ff;
+  color: var(--theme-primary-saturated);
+  background-color: var(--theme-primary-light);
 }
 
 .icon-button:active {
-  color: #000366;
+  color: var(--theme-primary-dark);
 }

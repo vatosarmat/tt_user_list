@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import clsx from 'clsx'
 
 import { State, StateContext, DispatchContext } from 'state'
-import type { BlockProps } from 'util/common'
+import type { BlockProps } from 'utils/common'
 import RadioGroup from './RadioGroup'
 import './Sort.css'
 
@@ -20,7 +20,7 @@ const Sort: React.FC<SortProps> = ({ classes }) => {
 
   return (
     <div className={clsx('sort', classes)}>
-      <h2 className="text-sub-title sort__title">Sort by</h2>
+      <h2 className="text-xlarge sort__title">Sort by</h2>
       <RadioGroup variants={variants} name="user" value={sortKey} onChange={setSortKey} />
     </div>
   )

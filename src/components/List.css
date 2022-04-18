@@ -1,21 +1,19 @@
 /* link-button */
 .link-button {
   text-decoration: none;
-  color: #292ecc;
+  border-radius: 2px;
+  color: var(--theme-primary-normal);
 }
 
 .link-button:hover {
   cursor: pointer;
-  background-color: #e5e6ff;
+  color: var(--theme-primary-saturated);
+  background-color: var(--theme-primary-light);
 }
 
 /* list */
-.list__title {
-  text-align: center;
-}
-
-.list__items > *:not(:last-child) {
-  margin-bottom: 24px;
+.list > *:not(:last-child) {
+  margin-bottom: var(--layout-spacing-medium);
 }
 
 /* list-item */
@@ -28,7 +26,7 @@
 
   list-style-type: none;
 
-  background: #ebebeb;
+  background: var(--theme-neutral-light3);
   border-radius: 8px;
   padding: 8px 16px;
 }
@@ -45,4 +43,5 @@
 
 .list-item__label {
   text-align: right;
+  color: var(--theme-neutral-light);
 }
