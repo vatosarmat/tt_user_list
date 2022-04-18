@@ -12,7 +12,15 @@
 }
 
 /* list */
-.list > *:not(:last-child) {
+.list__count {
+  text-align: right;
+}
+
+.list__items {
+  margin-bottom: var(--layout-spacing-medium);
+}
+
+.list__items > *:not(:last-child) {
   margin-bottom: var(--layout-spacing-medium);
 }
 

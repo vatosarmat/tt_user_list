@@ -34,19 +34,23 @@ const ListItem: React.FC<ListItemProps> = ({ id, fullName, city, company }) => {
 
 const List: React.FC = () => {
   const { userInfoTable, userInfoSortKey } = useContext(StateContext)
+  const list = Object.values(userInfoTable)
 
   return (
-    <ul className="list">
-      {Object.values(userInfoTable)
-        .sort((a, b) => {
-          const aa = a[userInfoSortKey]
-          const bb = b[userInfoSortKey]
-          return aa > bb ? 1 : aa < bb ? -1 : 0
-        })
-        .map(item => (
-          <ListItem {...item} key={item.id} />
-        ))}
-    </ul>
+    <div className="list">
+      <ul className="list__items">
+        {list
+          .sort((a, b) => {
+            const aa = a[userInfoSortKey]
+            const bb = b[userInfoSortKey]
+            return aa > bb ? 1 : aa < bb ? -1 : 0
+          })
+          .map(item => (
+            <ListItem {...item} key={item.id} />
+          ))}
+      </ul>
+      <p className="text-large list__count">{list.length} items found</p>
+    </div>
   )
 }
 
