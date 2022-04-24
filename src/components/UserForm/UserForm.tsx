@@ -9,6 +9,10 @@ import { ReactComponent as Pencil } from 'icons/pencil.svg'
 import { ReactComponent as Trash } from 'icons/trash.svg'
 import { ReactComponent as Cross } from 'icons/x.svg'
 import { ReactComponent as Plus } from 'icons/plus.svg'
+
+import Button from './Button'
+import Modal from './Modal'
+
 import './UserForm.css'
 
 type FormContextValue = {
@@ -119,11 +123,21 @@ const UserFormCommon: React.FC<UserFormPropsCommon> = ({ onSubmit, classes, chil
 type UserFormEditProps = BlockProps & { id: string }
 
 const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
-  const [readOnly, setReadOnly] = useState(true)
+  type UserFormState = 'read' | 'edit' | 'remove'
+  const [state, setState] = useState<UserFormState>('read')
   const userInfo = useContext(StateContext).userInfoTable[id]
   const dispatch = useContext(DispatchContext)
   const [fieldsRef, register] = useFormFields()
   const navigate = useNavigate()
+
+  const onEdit: React.MouseEventHandler<HTMLButtonElement> = evt => {
+    setState('edit')
+    console.log('onEdit')
+    evt.preventDefault()
+  }
+  const onRemove = () => setState('remove')
+  const onCancelEdit = () => setState('read')
+  const onCancelRemove = () => setState('edit')
 
   const onApplyEdit: UserFormPropsCommon['onSubmit'] = evt => {
     const newUserInfo: Record<string, string> = {}
@@ -131,60 +145,46 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
       newUserInfo[name] = inputEl.value.trim()
     }
     dispatch({ type: 'UserInfo/edit', payload: { userInfoId: id, userInfoChange: newUserInfo } })
-    setReadOnly(true)
+    setState('read')
     evt.preventDefault()
   }
 
-  const onRemove: React.MouseEventHandler<HTMLButtonElement> = evt => {
+  const onApplyRemove: React.MouseEventHandler<HTMLButtonElement> = evt => {
     navigate('/')
     dispatch({ type: 'UserInfo/remove', payload: { userInfoId: id } })
     evt.preventDefault()
   }
 
-  const formContext: FormContextValue = { register, disabled: readOnly, defaultRecord: userInfo }
+  const disabled = state !== 'edit'
+  const formContext: FormContextValue = { register, disabled, defaultRecord: userInfo }
 
   return (
-    <FormContext.Provider value={formContext}>
-      <UserFormCommon onSubmit={onApplyEdit} {...props}>
-        {readOnly ? (
+    <>
+      <FormContext.Provider value={formContext}>
+        <UserFormCommon onSubmit={onApplyEdit} {...props}>
           <div className="user-form__buttons">
-            <button
-              type="button"
-              className="text-normal user-form__edit"
-              onClick={evt => {
-                setReadOnly(false)
-                evt.preventDefault()
-              }}
-            >
-              <Pencil width="1em" height="1em" />
-              Edit
-            </button>
+            {state === 'read' ? (
+              <Button icon={Pencil} label="Edit" onClick={onEdit} color="primary" />
+            ) : (
+              <>
+                <Button disabled={disabled} icon={Check} label="Apply" onClick="submit" color="primary" />
+                <Button disabled={disabled} icon={Trash} label="Remove" onClick={onRemove} color="danger" />
+                <Button disabled={disabled} icon={Cross} label="Cancel" onClick={onCancelEdit} />
+              </>
+            )}
           </div>
-        ) : (
-          <div className="user-form__buttons">
-            <button type="submit" className="text-normal user-form__apply">
-              <Check width="1em" height="1em" />
-              Apply
-            </button>
-            <button type="button" className="text-normal user-form__remove" onClick={onRemove}>
-              <Trash width="1em" height="1em" />
-              Remove
-            </button>
-            <button
-              type="button"
-              className="text-normal user-form__cancel"
-              onClick={evt => {
-                setReadOnly(true)
-                evt.preventDefault()
-              }}
-            >
-              <Cross width="1em" height="1em" />
-              Cancel
-            </button>
-          </div>
-        )}
-      </UserFormCommon>
-    </FormContext.Provider>
+        </UserFormCommon>
+      </FormContext.Provider>
+      <Modal open={state === 'remove'} onClose={onCancelRemove}>
+        <p className="text-normal user-form__paragraph">
+          Are you sure you wanna remove <span className="text-normal_bold">{userInfo.fullName}</span>?
+        </p>
+        <div className="user-form__buttons">
+          <Button icon={Check} label="Apply" onClick={onApplyRemove} color="danger" />
+          <Button icon={Cross} label="Cancel" onClick={onCancelRemove} />
+        </div>
+      </Modal>
+    </>
   )
 }
 
@@ -214,10 +214,7 @@ const UserFormAdd: React.FC<UserFormAddProps> = props => {
     <FormContext.Provider value={{ register }}>
       <UserFormCommon onSubmit={onSubmit} {...props}>
         <div className="user-form__buttons">
-          <button type="submit" className="text-normal user-form__apply">
-            <Plus width="1em" height="1em" />
-            Submit
-          </button>
+          <Button icon={Plus} label="Submit" onClick="submit" />
         </div>
       </UserFormCommon>
     </FormContext.Provider>

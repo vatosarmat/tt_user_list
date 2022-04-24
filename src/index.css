@@ -28,16 +28,19 @@ code {
   --theme-neutral-light: #808080; /*light text on lite items, form fields border*/
   --theme-neutral-light2: #cdcdcd; /*sidebar, form border*/
   --theme-neutral-light3: #eaeaea; /*hover, list item*/
+  --theme-neutral-light9: #fafafa;
   --theme-neutral-light10: #ffffff;
 
   --theme-primary-dark: #000366;
   --theme-primary-normal: #292ecc;
   --theme-primary-saturated: #0000ff;
   --theme-primary-light: #e5e6ff;
+  --theme-primary-grayed: #a3a4cc;
 
   --theme-danger-dark: #660000;
   --theme-danger-normal: #cc2929;
   --theme-danger-light: #ffcccc;
+  --theme-danger-grayed: #cca3a3;
 }
 
 #root > * {

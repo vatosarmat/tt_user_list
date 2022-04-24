@@ -1,0 +1,37 @@
+.modal {
+  /* modal layer */
+  position: fixed;
+  z-index: 999;
+  inset: 0;
+
+  /* overlay */
+  background-color: rgb(0, 0, 0, 0.6);
+
+  /* center its content */
+  /* 1 - seems better */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* 2 - alternative */
+  /* width: 300px; */
+  /* height: 200px; */
+  /* top: 50%; */
+  /* left: 50%; */
+  /* transform: translate(-50%, -50%); */
+}
+
+.modal__window {
+  min-width: var(--layout-side-width);
+  background-color: var(--theme-neutral-light10);
+}
+
+.modal__header {
+  display: flex;
+  justify-content: flex-end;
+  background-color: var(--theme-neutral-light2);
+}
+
+.modal__content {
+  padding: var(--layout-spacing-large);
+}

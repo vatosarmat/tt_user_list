@@ -12,7 +12,7 @@ import './App.css'
 
 const BackButton: React.FC = () => {
   const navigate = useNavigate()
-  return <IconButton Icon={ArrowCircleLeft} label="Back" onClick={() => navigate('/')} />
+  return <IconButton icon={ArrowCircleLeft} label="Back" onClick={() => navigate('/')} />
 }
 
 const ListSideRoute: React.FC = () => {
@@ -22,7 +22,7 @@ const ListSideRoute: React.FC = () => {
     <>
       <Sort />
       <CenterBlock>
-        <IconButton Icon={PlusCircle} label="Add new" onClick={() => navigate('/add')} />
+        <IconButton icon={PlusCircle} label="Add new" onClick={() => navigate('/add')} />
       </CenterBlock>
     </>
   )
