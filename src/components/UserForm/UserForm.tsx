@@ -9,6 +9,7 @@ import { ReactComponent as Pencil } from 'icons/pencil.svg'
 import { ReactComponent as Trash } from 'icons/trash.svg'
 import { ReactComponent as Cross } from 'icons/x.svg'
 import { ReactComponent as Plus } from 'icons/plus.svg'
+import { SnackbarContext } from 'components/Snackbar'
 
 import Button from './Button'
 import Modal from './Modal'
@@ -127,6 +128,7 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
   const [state, setState] = useState<UserFormState>('read')
   const userInfo = useContext(StateContext).userInfoTable[id]
   const dispatch = useContext(DispatchContext)
+  const setNotification = useContext(SnackbarContext)
   const [fieldsRef, register] = useFormFields()
   const navigate = useNavigate()
 
@@ -146,12 +148,14 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
     }
     dispatch({ type: 'UserInfo/edit', payload: { userInfoId: id, userInfoChange: newUserInfo } })
     setState('read')
+    setNotification(`**${userInfo.fullName}** was updated!`)
     evt.preventDefault()
   }
 
   const onApplyRemove: React.MouseEventHandler<HTMLButtonElement> = evt => {
     navigate('/')
     dispatch({ type: 'UserInfo/remove', payload: { userInfoId: id } })
+    setNotification(`**${userInfo.fullName}** was removed!`)
     evt.preventDefault()
   }
 
@@ -193,6 +197,7 @@ type UserFormAddProps = BlockProps & {}
 const UserFormAdd: React.FC<UserFormAddProps> = props => {
   const addedId = useContext(StateContext).nextUserInfoId.toString()
   const dispatch = useContext(DispatchContext)
+  const setNotification = useContext(SnackbarContext)
   const [didAdded, setDidAdded] = useState<string | undefined>(undefined)
   const [fieldsRef, register] = useFormFields()
 
@@ -204,6 +209,7 @@ const UserFormAdd: React.FC<UserFormAddProps> = props => {
 
     dispatch({ type: 'UserInfo/add', payload: { userInfoData: userInfo as Omit<UserInfo, 'id'> } })
     setDidAdded(addedId)
+    setNotification(`**${userInfo.fullName}** successfully added!`)
   }
 
   if (didAdded) {
@@ -214,7 +220,7 @@ const UserFormAdd: React.FC<UserFormAddProps> = props => {
     <FormContext.Provider value={{ register }}>
       <UserFormCommon onSubmit={onSubmit} {...props}>
         <div className="user-form__buttons">
-          <Button icon={Plus} label="Submit" onClick="submit" />
+          <Button icon={Plus} label="Submit" onClick="submit" color="primary" />
         </div>
       </UserFormCommon>
     </FormContext.Provider>

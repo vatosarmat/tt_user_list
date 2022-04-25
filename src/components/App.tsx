@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useParams, useNavigate, BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 import Sort from 'components/Sort'
@@ -6,6 +7,7 @@ import UserForm from 'components/UserForm'
 import IconButton from 'components/utils/IconButton'
 import CenterBlock from 'components/utils/CenterBlock'
 import MainTitle from 'components/MainTitle'
+import Snackbar, { SnackbarContext } from 'components/Snackbar'
 import { ReactComponent as ArrowCircleLeft } from 'icons/arrow-circle-left.svg'
 import { ReactComponent as PlusCircle } from 'icons/plus-circle.svg'
 import './App.css'
@@ -46,36 +48,44 @@ const UserFormWithId: React.FC = () => {
 }
 
 const App: React.FC = () => {
+  const [notification, setNotification] = useState<string | undefined>(undefined)
+  const onNotificationTimeout = () => {
+    setNotification(undefined)
+  }
+
   return (
     <div className="app">
       <BrowserRouter>
-        <div className="app__side-title"></div>
-        <div className="app__main-title">
-          <Routes>
-            <Route path=":id" element={<MainTitle text="User profile" />} />
-            <Route path="add" element={<MainTitle text="New user" />} />
-            <Route index element={<MainTitle text="User list" />} />
-            <Route path="*" element={null} />
-          </Routes>
-        </div>
-        <div className="app__side-content">
-          <div className="app__side-content-inner">
+        <SnackbarContext.Provider value={setNotification}>
+          <div className="app__side-title"></div>
+          <div className="app__main-title">
             <Routes>
-              <Route path=":id" element={<BackButtonRoute />} />
-              <Route path="add" element={<BackButtonRoute />} />
-              <Route index element={<ListSideRoute />} />
-              <Route path="*" element={<Navigate to="/" />} />
+              <Route path=":id" element={<MainTitle text="User profile" />} />
+              <Route path="add" element={<MainTitle text="New user" />} />
+              <Route index element={<MainTitle text="User list" />} />
+              <Route path="*" element={null} />
             </Routes>
           </div>
-        </div>
-        <main className="app__main-content">
-          <Routes>
-            <Route path=":id" element={<UserFormWithId />} />
-            <Route path="add" element={<UserForm />} />
-            <Route index element={<List />} />
-            <Route path="*" element={null} />
-          </Routes>
-        </main>
+          <div className="app__side-content">
+            <div className="app__side-content-inner">
+              <Routes>
+                <Route path=":id" element={<BackButtonRoute />} />
+                <Route path="add" element={<BackButtonRoute />} />
+                <Route index element={<ListSideRoute />} />
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </div>
+          </div>
+          <main className="app__main-content">
+            <Routes>
+              <Route path=":id" element={<UserFormWithId />} />
+              <Route path="add" element={<UserForm />} />
+              <Route index element={<List />} />
+              <Route path="*" element={null} />
+            </Routes>
+          </main>
+        </SnackbarContext.Provider>
+        <Snackbar timeout={3000} text={notification} onTimeout={onNotificationTimeout} />
       </BrowserRouter>
     </div>
   )
