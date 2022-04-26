@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useParams, useNavigate, BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation, BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { CSSTransition, SwitchTransition } from 'react-transition-group'
 
 import Sort from 'components/Sort'
 import List from 'components/List'
@@ -21,12 +22,12 @@ const ListSideRoute: React.FC = () => {
   const navigate = useNavigate()
 
   return (
-    <>
+    <div className="app__side-content-inner">
       <Sort />
       <CenterBlock>
         <IconButton icon={PlusCircle} label="Add new" onClick={() => navigate('/add')} />
       </CenterBlock>
-    </>
+    </div>
   )
 }
 
@@ -47,47 +48,67 @@ const UserFormWithId: React.FC = () => {
   return <UserForm id={id} />
 }
 
-const App: React.FC = () => {
+const AppInner: React.FC = () => {
   const [notification, setNotification] = useState<string | undefined>(undefined)
+  const location = useLocation()
   const onNotificationTimeout = () => {
     setNotification(undefined)
   }
+  const transitionTimeout = 500
 
   return (
     <div className="app">
-      <BrowserRouter>
-        <SnackbarContext.Provider value={setNotification}>
-          <div className="app__side-title"></div>
-          <div className="app__main-title">
-            <Routes>
-              <Route path=":id" element={<MainTitle text="User profile" />} />
-              <Route path="add" element={<MainTitle text="New user" />} />
-              <Route index element={<MainTitle text="User list" />} />
-              <Route path="*" element={null} />
-            </Routes>
-          </div>
-          <div className="app__side-content">
-            <div className="app__side-content-inner">
-              <Routes>
-                <Route path=":id" element={<BackButtonRoute />} />
-                <Route path="add" element={<BackButtonRoute />} />
-                <Route index element={<ListSideRoute />} />
-                <Route path="*" element={<Navigate to="/" />} />
+      <SnackbarContext.Provider value={setNotification}>
+        <div className="app__side-title"></div>
+        <div className="app__main-title">
+          <SwitchTransition>
+            <CSSTransition key={location.key} classNames="fade" timeout={transitionTimeout}>
+              <Routes location={location}>
+                <Route path=":id" element={<MainTitle text="User profile" />} />
+                <Route path="add" element={<MainTitle text="New user" />} />
+                <Route index element={<MainTitle text="User list" />} />
+                <Route path="*" element={null} />
               </Routes>
-            </div>
+            </CSSTransition>
+          </SwitchTransition>
+        </div>
+        <div className="app__side-content">
+          <div className="app__side-content-sticky">
+            <SwitchTransition>
+              <CSSTransition key={location.key} classNames="fade" timeout={transitionTimeout}>
+                <Routes location={location}>
+                  <Route path=":id" element={<BackButtonRoute />} />
+                  <Route path="add" element={<BackButtonRoute />} />
+                  <Route index element={<ListSideRoute />} />
+                  <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
+              </CSSTransition>
+            </SwitchTransition>
           </div>
-          <main className="app__main-content">
-            <Routes>
-              <Route path=":id" element={<UserFormWithId />} />
-              <Route path="add" element={<UserForm />} />
-              <Route index element={<List />} />
-              <Route path="*" element={null} />
-            </Routes>
-          </main>
-        </SnackbarContext.Provider>
-        <Snackbar timeout={3000} text={notification} onTimeout={onNotificationTimeout} />
-      </BrowserRouter>
+        </div>
+        <main className="app__main-content">
+          <SwitchTransition>
+            <CSSTransition key={location.key} classNames="slide" timeout={transitionTimeout}>
+              <Routes location={location}>
+                <Route path=":id" element={<UserFormWithId />} />
+                <Route path="add" element={<UserForm />} />
+                <Route index element={<List />} />
+                <Route path="*" element={null} />
+              </Routes>
+            </CSSTransition>
+          </SwitchTransition>
+        </main>
+      </SnackbarContext.Provider>
+      <Snackbar timeout={3000} text={notification} onTimeout={onNotificationTimeout} />
     </div>
+  )
+}
+
+const App: React.FC = () => {
+  return (
+    <BrowserRouter>
+      <AppInner />
+    </BrowserRouter>
   )
 }
 
