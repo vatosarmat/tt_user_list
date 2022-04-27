@@ -1,4 +1,4 @@
-import { useState, useContext, useRef, createContext } from 'react'
+import { useEffect, useState, useContext, useRef, createContext } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import clsx from 'clsx'
 
@@ -124,20 +124,34 @@ const UserFormCommon: React.FC<UserFormPropsCommon> = ({ onSubmit, classes, chil
 type UserFormEditProps = BlockProps & { id: string }
 
 const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
-  type UserFormState = 'read' | 'edit' | 'remove'
-  const [state, setState] = useState<UserFormState>('read')
+  type UserFormState = 'read' | 'edit' | 'removeDialog' | 'removeApplied'
   const userInfo = useContext(StateContext).userInfoTable[id]
   const dispatch = useContext(DispatchContext)
   const setNotification = useContext(SnackbarContext)
   const [fieldsRef, register] = useFormFields()
   const navigate = useNavigate()
 
+  const [state, setState] = useState<UserFormState>('read')
+  const removeApplied = state === 'removeApplied'
+
+  useEffect(() => {
+    if (state === 'removeApplied') {
+      setNotification(`**${userInfo.fullName}** was removed!`)
+      navigate('/')
+    }
+    return () => {
+      if (state === 'removeApplied') {
+        dispatch({ type: 'UserInfo/remove', payload: { userInfoId: id } })
+      }
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [removeApplied])
+
   const onEdit: React.MouseEventHandler<HTMLButtonElement> = evt => {
     setState('edit')
-    console.log('onEdit')
     evt.preventDefault()
   }
-  const onRemove = () => setState('remove')
+  const onRemove = () => setState('removeDialog')
   const onCancelEdit = () => setState('read')
   const onCancelRemove = () => setState('edit')
 
@@ -153,9 +167,7 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
   }
 
   const onApplyRemove: React.MouseEventHandler<HTMLButtonElement> = evt => {
-    navigate('/')
-    dispatch({ type: 'UserInfo/remove', payload: { userInfoId: id } })
-    setNotification(`**${userInfo.fullName}** was removed!`)
+    setState('removeApplied')
     evt.preventDefault()
   }
 
@@ -179,7 +191,7 @@ const UserFormEdit: React.FC<UserFormEditProps> = ({ id, ...props }) => {
           </div>
         </UserFormCommon>
       </FormContext.Provider>
-      <Modal open={state === 'remove'} onClose={onCancelRemove}>
+      <Modal open={state === 'removeDialog'} onClose={onCancelRemove}>
         <p className="text-normal user-form__paragraph">
           Are you sure you wanna remove <span className="text-normal_bold">{userInfo.fullName}</span>?
         </p>

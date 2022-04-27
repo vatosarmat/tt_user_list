@@ -31,11 +31,13 @@ const Snackbar: React.FC<SnackbarProps> = ({ text, timeout, onTimeout }) => {
           {text
             .split(/(\*\*.+?\*\*)/g)
             .filter(chunk => chunk)
-            .map(chunk =>
+            .map((chunk, idx) =>
               chunk.startsWith('**') && chunk.endsWith('**') ? (
-                <span className="text-normal_bold">{chunk.slice(2, -2)}</span>
+                <span key={idx} className="text-normal_bold">
+                  {chunk.slice(2, -2)}
+                </span>
               ) : (
-                <>{chunk}</>
+                <span key={idx}>{chunk}</span>
               )
             )}
         </p>

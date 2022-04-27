@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { CSSTransition } from 'react-transition-group'
 
 import IconButton from 'components/utils/IconButton'
 import ReactPortal from 'components/utils/ReactPortal'
@@ -11,7 +12,7 @@ type ModalProps = {
 }
 
 const Modal: React.FC<ModalProps> = ({ children, open, onClose }) => {
-  // const nodeRef = useRef(null)
+  const nodeRef = useRef(null)
 
   useEffect(() => {
     const closeOnEscapeKey = (e: KeyboardEvent) => {
@@ -25,20 +26,18 @@ const Modal: React.FC<ModalProps> = ({ children, open, onClose }) => {
     }
   })
 
-  if (!open) {
-    return null
-  }
-
   return (
     <ReactPortal domContainerId="modal-id">
-      <div className="modal">
-        <div className="modal__window">
-          <div className="modal__header">
-            <IconButton icon={Cross} onClick={onClose} />
+      <CSSTransition in={open} timeout={{ enter: 0, exit: 300 }} unmountOnExit classNames="modal" nodeRef={nodeRef}>
+        <div className="modal">
+          <div className="modal__window" ref={nodeRef}>
+            <div className="modal__header">
+              <IconButton icon={Cross} onClick={onClose} />
+            </div>
+            <div className="modal__content">{children}</div>
           </div>
-          <div className="modal__content">{children}</div>
         </div>
-      </div>
+      </CSSTransition>
     </ReactPortal>
   )
 }
