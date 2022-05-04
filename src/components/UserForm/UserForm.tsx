@@ -222,10 +222,11 @@ const UserFormAdd: React.FC<UserFormAddProps> = props => {
     dispatch({ type: 'UserInfo/add', payload: { userInfoData: userInfo as Omit<UserInfo, 'id'> } })
     setDidAdded(addedId)
     setNotification(`**${userInfo.fullName}** successfully added!`)
+    evt.preventDefault()
   }
 
   if (didAdded) {
-    return <Navigate to={'/' + didAdded} />
+    return <Navigate to={'/' + didAdded} state="new" />
   }
 
   return (
